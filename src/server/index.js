@@ -31,6 +31,8 @@ const rawBodyMiddleware = require('./middleware/rawBodyMiddleware');
  * Temporarily loaded from React Native to get debugger running. Soon to be replaced.
  */
 const WebSocketProxy = require('./util/WebsocketProxy.js');
+const WebSocketDebuggerProxy = require('./util/WebsocketDebuggerProxy.js');
+const WebSocketHMRProxy = require('./util/WebSocketHMRProxy.js');
 
 /**
  * Packager-like Server running on top of Webpack
@@ -54,7 +56,10 @@ function createServer(
 
   const httpServer = http.createServer(appHandler);
 
-  const debuggerProxy = new WebSocketProxy(httpServer, '/debugger-proxy');
+  WebSocketProxy.create(httpServer);
+  const debuggerProxy = new WebSocketDebuggerProxy('/debugger-proxy');
+  // eslint-disable-next-line
+  const hmrProxy = new WebSocketHMRProxy('/hot');
 
   // Middlewares
   appHandler
