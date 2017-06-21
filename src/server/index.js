@@ -17,6 +17,7 @@ type CompileCallback = (stats: WebpackStats) => void;
  * Custom made middlewares
  */
 const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
 const devToolsMiddleware = require('./middleware/devToolsMiddleware');
 const liveReloadMiddleware = require('./middleware/liveReloadMiddleware');
 const statusPageMiddleware = require('./middleware/statusPageMiddleware');
@@ -48,6 +49,7 @@ function createServer(
     noInfo: true,
     reporter: null,
     stats: 'errors-only',
+    hot: true,
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000,
@@ -73,6 +75,7 @@ function createServer(
     .use('/systrace', systraceMiddleware)
     .use(loggerMiddleware)
     .use(webpackMiddleware)
+    .use(webpackHotMiddleware(compiler))
     .use(missingBundleMiddleware);
 
   // Handle callbacks
