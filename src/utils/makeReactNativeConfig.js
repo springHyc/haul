@@ -47,7 +47,7 @@ type WebpackConfigFactory =
  * Returns default config based on environment
  */
 const getDefaultConfig = (
-  { platform, root, dev, minify, bundle },
+  { platform, root, dev, minify, bundle, port },
 ): WebpackConfig => ({
   context: root,
   entry: [
@@ -56,6 +56,7 @@ const getDefaultConfig = (
      * It is also needed to setup the required environment
      */
     require.resolve('./polyfillEnvironment.js'),
+    `${require.resolve('webpack-hot-middleware/client')}?path=http://localhost:${port}/__webpack_hmr&overlay=false`,
   ],
   /**
    * `cheap-module-source-map` is faster than `source-map`,
@@ -65,6 +66,7 @@ const getDefaultConfig = (
   output: {
     path: path.join(root, 'dist'),
     filename: `index.${platform}.bundle`,
+    publicPath: `http://localhost:${port}/`,
   },
   module: {
     rules: [
@@ -99,6 +101,7 @@ const getDefaultConfig = (
     ],
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     /**
      * MacOS has a case insensitive filesystem
      * This is needed so we can error on incorrect case
@@ -197,6 +200,7 @@ const getDefaultConfig = (
     mainFields: ['react-native', 'browser', 'main'],
     extensions: [`.${platform}.js`, '.native.js', '.js'],
   },
+  target: "webworker"
 });
 
 /**
