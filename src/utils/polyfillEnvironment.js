@@ -33,3 +33,5 @@ if (!global.self) {
 }
 
 require('InitializeCore');
+
+require('../client/importScriptsPolyfill');

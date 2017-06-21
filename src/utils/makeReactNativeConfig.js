@@ -56,7 +56,7 @@ const getDefaultConfig = (
      * It is also needed to setup the required environment
      */
     require.resolve('./polyfillEnvironment.js'),
-    `${require.resolve('webpack-hot-middleware/client')}?path=http://localhost:${port}/__webpack_hmr&overlay=false`,
+    `${require.resolve('../client/hotClient.js')}?path=http://localhost:${port}/hot&overlay=false`,
   ],
   /**
    * `cheap-module-source-map` is faster than `source-map`,
