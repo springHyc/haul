@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-const WebSocketProxy = require('./WebsocketProxy');
-
 /**
  * Sends message to a given socket
  */
@@ -19,7 +17,11 @@ const send = (socket, message) => {
 /**
  * Websocket proxy between debugger and React Native client
  */
-class WebSocketDebuggerProxy extends WebSocketProxy {
+class WebSocketProxy {
+  constructor(wsp) {
+    wsp.onConnection(this.onConnection.bind(this));
+  }
+
   /**
    * Called everytime new WebSocket connection is established. Each specifies
    * `role` param, which we use to determine type of connection.
@@ -103,4 +105,4 @@ class WebSocketDebuggerProxy extends WebSocketProxy {
   }
 }
 
-module.exports = WebSocketDebuggerProxy;
+module.exports = WebSocketProxy;

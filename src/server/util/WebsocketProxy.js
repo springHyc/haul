@@ -3,31 +3,19 @@
  * All rights reserved.
  */
 
-const WebSocketServer = require('ws').Server;
-  
-let webSocketServer;
 /**
- * Websocket proxy for multiple WebSocket handlers.
+ * Proxy connection from single WebSockerServer by given path.
  */
-class WebSocketProxy {
-  static create(server) {
-    webSocketServer = new WebSocketServer({ server });
-  }
-
-  constructor(path) {
-    this.wss = webSocketServer;
-    this.path = path;
-
-    this.wss.on('connection', socket => {
-      this.checkPath(socket, 'onConnection');
-    });
-  }
-
-  checkPath(socket, handler) {
-    if (socket.upgradeReq.url.indexOf(this.path) === 0) {
-      this[handler](socket);
-    }
-  }
+function webSocketProxy(webSocketServer, path) {
+  return {
+    onConnection(handler) {
+      webSocketServer.on('connection', socket => {
+        if (socket.upgradeReq.url.indexOf(path) === 0) {
+          handler(socket);
+        }
+      });
+    },
+  };
 }
 
-module.exports = WebSocketProxy;
+module.exports = webSocketProxy;
