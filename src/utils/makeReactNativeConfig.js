@@ -200,7 +200,7 @@ const getDefaultConfig = (
     mainFields: ['react-native', 'browser', 'main'],
     extensions: [`.${platform}.js`, '.native.js', '.js'],
   },
-  target: "webworker"
+  target: 'webworker',
 });
 
 /**
